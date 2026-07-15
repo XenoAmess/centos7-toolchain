@@ -9,6 +9,7 @@ RUN sed -i 's/^mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/*.repo && \
     rm -rf /var/cache/yum
 RUN echo $'[centos-sclo-rh]\nname=CentOS-7 - SCLo rh\nbaseurl=http://vault.centos.org/centos/7/sclo/x86_64/rh/\ngpgcheck=1\nenabled=1\ngpgkey=http://vault.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7\n' > /etc/yum.repos.d/centos-sclo-rh-vault.repo && \
     echo $'[centos-sclo-sclo]\nname=CentOS-7 - SCLo sclo\nbaseurl=http://vault.centos.org/centos/7/sclo/x86_64/sclo/\ngpgcheck=1\nenabled=1\ngpgkey=http://vault.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7\n' > /etc/yum.repos.d/centos-sclo-sclo-vault.repo && \
+    yum-config-manager --disable centos-sclo-rh centos-sclo-sclo 2>/dev/null || true && \
     yum install -y devtoolset-9 binutils-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
