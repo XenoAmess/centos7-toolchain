@@ -1,5 +1,14 @@
 FROM ghcr.io/gliwka/centos7-toolchain:main@sha256:e6cf17223408bb4d1314be547d74b23d04bcf6480d2fe23822fb672a52775f76
 
+# LLVM 22.1.8 needs Python >= 3.8 (CentOS 7 has 3.6)
+RUN mkdir /python3 && cd /python3 && \
+    curl -O https://www.python.org/ftp/python/3.9.21/Python-3.9.21.tar.xz && \
+    tar -xvf Python-3.9.21.tar.xz && \
+    cd Python-3.9.21 && \
+    ./configure --enable-optimizations && \
+    make -j $(nproc) && make install && \
+    rm -rf /python3
+
 # Stage 2: Clang 22.1.8 + lld compiled with the existing Stage 1 Clang 17
 ENV CC=/usr/local/bin/clang
 ENV CXX=/usr/local/bin/clang++
