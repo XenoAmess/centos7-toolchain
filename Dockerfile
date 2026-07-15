@@ -3,7 +3,7 @@ ADD adoptium.repo /etc/yum.repos.d/
 ADD adoptium.gpg /etc/pki/rpm-gpg/
 RUN yum update -y && \
     yum install -y centos-release-scl git python3 openssl-devel patch temurin-21-jdk && \
-    yum install -y devtoolset-9 && \
+    yum install -y devtoolset-9 binutils-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
 COPY --chmod=0755 .bashrc /root
@@ -41,4 +41,25 @@ RUN mkdir /clang && \
     make -j $(nproc) && \
     make install && \
     rm -rf /clang
+# Stage 2: Clang 22.1.8 + lld compiled with Stage 1 Clang 17
+ENV CC=/usr/local/bin/clang
+ENV CXX=/usr/local/bin/clang++
+RUN mkdir /clang22 && \
+    cd /clang22 && \
+    curl -O -L https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.8/llvm-project-22.1.8.src.tar.xz && \
+    echo "2615b20ba08534f83ab8ecc7b5ba43b5f1dfcf9cdb2534a32fcdbf0ccdd9a008b46276e45ef26ed9377f65b5e4ae89ea798f3863fd034484b5715140f3a7b35c  llvm-project-22.1.8.src.tar.xz" | sha512sum -c && \
+    tar -xvf llvm-project-22.1.8.src.tar.xz && \
+    cd llvm-project-22.1.8.src && \
+    mkdir build && \
+    cd build && \
+    cmake -DLLVM_ENABLE_PROJECTS="clang;lld" \
+          -DLLVM_BINUTILS_INCDIR=/usr/include \
+          -DCMAKE_BUILD_TYPE=Release \
+          -G "Unix Makefiles" ../llvm && \
+    make -j $(nproc) && \
+    make install && \
+    rm -rf /clang22
+# Revert CC/CXX to default so Stage 1 Clang is not accidentally used
+ENV CC=
+ENV CXX=
 ENTRYPOINT ["/bin/bash", "-l", "-c"]
