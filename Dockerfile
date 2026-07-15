@@ -1,14 +1,14 @@
 FROM docker.io/library/centos:7
 ADD adoptium.repo /etc/yum.repos.d/
 ADD adoptium.gpg /etc/pki/rpm-gpg/
-RUN sed -i 's/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/CentOS-*.repo && \
-    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*.repo && \
+RUN sed -i 's/^mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/*.repo && \
+    sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/*.repo && \
     yum update -y && \
     yum install -y centos-release-scl git python3 openssl-devel patch temurin-21-jdk && \
     yum clean all && \
     rm -rf /var/cache/yum
-RUN sed -i 's/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/CentOS-*.repo && \
-    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*.repo && \
+RUN sed -i 's/^mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/*.repo && \
+    sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/*.repo && \
     yum install -y devtoolset-9 binutils-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
