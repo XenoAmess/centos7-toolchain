@@ -7,8 +7,8 @@ RUN sed -i 's/^mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/*.repo && \
     yum install -y centos-release-scl git python3 openssl-devel patch temurin-21-jdk && \
     yum clean all && \
     rm -rf /var/cache/yum
-RUN sed -i 's/^mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/*.repo && \
-    sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/*.repo && \
+RUN echo $'[centos-sclo-rh]\nname=CentOS-7 - SCLo rh\nbaseurl=http://vault.centos.org/centos/7/sclo/x86_64/rh/\ngpgcheck=1\nenabled=1\ngpgkey=http://vault.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7\n' > /etc/yum.repos.d/centos-sclo-rh-vault.repo && \
+    echo $'[centos-sclo-sclo]\nname=CentOS-7 - SCLo sclo\nbaseurl=http://vault.centos.org/centos/7/sclo/x86_64/sclo/\ngpgcheck=1\nenabled=1\ngpgkey=http://vault.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7\n' > /etc/yum.repos.d/centos-sclo-sclo-vault.repo && \
     yum install -y devtoolset-9 binutils-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
