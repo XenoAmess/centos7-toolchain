@@ -20,6 +20,7 @@ RUN mkdir /clang22 && \
     mkdir build && \
     cd build && \
     cmake -DLLVM_ENABLE_PROJECTS="clang;lld" \
+          -DLLVM_TARGETS_TO_BUILD="X86;AArch64" \
           -DCMAKE_BUILD_TYPE=Release \
           -G "Unix Makefiles" ../llvm && \
     make -j $(nproc) && \
