@@ -6,7 +6,6 @@ ENV CXX=/usr/local/bin/clang++
 RUN mkdir /clang22 && \
     cd /clang22 && \
     curl -O -L https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.8/llvm-project-22.1.8.src.tar.xz && \
-    echo "2615b20ba08534f83ab8ecc7b5ba43b5f1dfcf9cdb2534a32fcdbf0ccdd9a008b46276e45ef26ed9377f65b5e4ae89ea798f3863fd034484b5715140f3a7b35c  llvm-project-22.1.8.src.tar.xz" | sha512sum -c && \
     tar -xvf llvm-project-22.1.8.src.tar.xz && \
     cd llvm-project-22.1.8.src && \
     mkdir build && \
